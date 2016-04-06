@@ -60,7 +60,7 @@ Set the default options for FastMM here.
  not properly set the IsMultiThread variable. Also set this option if you are
  going to share this memory manager between a single threaded application and a
  multi-threaded DLL.}
-{.$define AssumeMultiThreaded}
+{$define AssumeMultiThreaded}
 
 {Enable this option to not call Sleep when a thread contention occurs. This
  option will improve performance if the ratio of the number of active threads
@@ -84,11 +84,11 @@ Set the default options for FastMM here.
 {Enable this option to suppress the generation of debug info for the
  FastMM4.pas unit. This will prevent the integrated debugger from stepping into
  the memory manager code.}
-{.$define NoDebugInfo}
+{$define NoDebugInfo}
 
 {Enable this option to suppress the display of all message dialogs. This is
  useful in service applications that should not be interrupted.}
-{.$define NoMessageBoxes}
+{$define NoMessageBoxes}
 
 {Set this option to use the Windows API OutputDebugString procedure to output
  debug strings on startup/shutdown and when errors occur.}
@@ -153,13 +153,13 @@ Set the default options for FastMM here.
 
   {Deletes the error log file on startup. No effect if LogErrorsToFile is not
    also set.}
-  {.$define ClearLogFileOnStartup}
+  {$define ClearLogFileOnStartup}
 
   {Loads the FASTMM_FullDebugMode.dll dynamically. If the DLL cannot be found
    then stack traces will not be available. Note that this may cause problems
    due to a changed DLL unload order when sharing the memory manager. Use with
    care.}
-  {.$define LoadDebugDLLDynamically}
+  {$define LoadDebugDLLDynamically}
 
     {.$define DoNotInstallIfDLLMissing}
     {If the FastMM_FullDebugMode.dll file is not available then FastMM will not
@@ -197,7 +197,7 @@ Set the default options for FastMM here.
 
 {Set this option to enable reporting of memory leaks. Combine it with the two
  options below for further fine-tuning.}
-{$define EnableMemoryLeakReporting}
+{.$define EnableMemoryLeakReporting}
 
   {Set this option to suppress the display and logging of expected memory leaks
    that were registered by pointer. Leaks registered by size or class are often
@@ -241,7 +241,7 @@ Set the default options for FastMM here.
  AMD K5, Pentium I and earlier CPUs. MMX is currently only used in the variable
  size move routines, so if UseCustomVariableSizeMoveRoutines is not set then
  this option has no effect.}
-{.$define EnableMMX}
+{$define EnableMMX}
 
   {Set this option to force the use of MMX instructions without checking
    whether the CPU supports it. If this option is disabled then the CPU will be
@@ -346,6 +346,23 @@ Set the default options for FastMM here.
   {.$define EnableMemoryLeakReporting}
   {.$define UseOutputDebugString}
 {$endif}
+
+// EZ: This is because we have COM-Module and singel EXE's don't need Share or where it leads to AV's (on COM-Module unload if shared with main exe)
+{$IFDEF MLCOREPACK}
+{$define UseRuntimePackages}
+{$define ShareMM}
+{$define AttemptToUseSharedMM}
+{$ENDIF MLCOREPACK}
+
+{$IFDEF DEBUG}
+{$define FullDebugMode}
+{$define CheckHeapForCorruption}
+{$define EnableMemoryLeakReporting}
+{$define UseOutputDebugString}
+{.$define AlwaysClearFreedMemory}
+{.$define CatchUseOfFreedInterfaces}
+{.$define RawStackTraces}
+{$ENDIF DEBUG}
 
 {--------------------Compilation Options For borlndmm.dll---------------------}
 {If you're compiling the replacement borlndmm.dll, set the defines below
